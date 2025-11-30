@@ -3,7 +3,7 @@ load_dotenv()
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from configurations.conection import DatabaseConnection
-from services.spotifyservices import get_token, get_preferences_data, get_spotify_token_sync, search_spotify_song
+from services.spotifyservices import get_spotify_token_sync, search_spotify_song
 import asyncio
 import httpx
 import os
