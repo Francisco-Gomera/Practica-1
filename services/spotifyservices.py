@@ -58,7 +58,8 @@ async def search_spotify_song(client: httpx.AsyncClient, token: str, song_name: 
                     "album": item["album"]["name"],
                     "imagen": item["album"]["images"][0]["url"] if item["album"]["images"] else None,
                     "preview_url": item.get("preview_url"),
-                    "spotify_url": item["external_urls"]["spotify"]
+                    "spotify_url": item["external_urls"]["spotify"],
+                    "track_id": item.get("id")
                 }
     except Exception as e:
         print(f"Error buscando {song_name}: {e}")
