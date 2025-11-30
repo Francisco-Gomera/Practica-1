@@ -10,7 +10,6 @@ import os
 
 HOST = os.getenv("DB_HOST")
 USER = os.getenv("DB_USER")
-# support multiple env var names (keep backwards compatibility)
 PASSWORD = os.getenv("DB_PASSWORD") or os.getenv("DB_PASS")
 DATABASE = os.getenv("DB_DATABASE") or os.getenv("DB_NAME")
 
