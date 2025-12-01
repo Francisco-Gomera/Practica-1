@@ -156,14 +156,12 @@ async def get_preferences(user_id: int):
         mydb = DatabaseConnection(host=HOST, user=USER, password=PASSWORD, database=DATABASE)
         mydb_conn = await mydb.get_connection()         
         mycursor = mydb_conn.cursor()
-        # Validate user exists
         mycursor.execute(f"SELECT name FROM users WHERE id = {user_id}")
         user_data = mycursor.fetchone()
         if user_data is None:
             mydb_conn.close()
             return JSONResponse(content={"message": "Usuario no encontrado"}, status_code=404)
         username = user_data[0]
-        # Get user preferences
         query = f"SELECT cancion, artista FROM preferencias WHERE id_usuario = {user_id}"
         mycursor.execute(query)
         rows = mycursor.fetchall()
@@ -172,7 +170,7 @@ async def get_preferences(user_id: int):
         raise HTTPException(status_code=500, detail=f"Error de base de datos: {str(e)}")
 
     if not rows:
-        return JSONResponse(content={"usuario_id": user_id, "message": "No se encontraron preferencias"}, status_code=404)
+        return JSONResponse(content={"usuario": user_id, "message": "No se le encontraron preferencias"}, status_code=404)
 
     token = get_spotify_token_sync()
     if not token:

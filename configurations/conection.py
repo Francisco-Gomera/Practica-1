@@ -14,7 +14,7 @@ class DatabaseConnection:
             pairs = (("host", self.host), ("user", self.user), ("password", self.password), ("database", self.database))
             missing = [name for name, val in pairs if not val]
             if missing:
-                raise ValueError(f"Missing DB connection parameters: {missing}")
+                raise ValueError(f"La cadena de conexión tiene parametros vacíos: {missing}")
             try:
                 loop = asyncio.get_running_loop()
                 self.mydb = await loop.run_in_executor(None, lambda: mysql.connector.connect(
@@ -24,13 +24,5 @@ class DatabaseConnection:
                     database=self.database
                 ))
             except mysql.connector.Error as e:
-                raise ConnectionError(f"Error connecting to database: {e}") from e
+                raise ConnectionError(f"Error conectando a la base de datos: {e}") from e
         return self.mydb
-
-    async def close_connection(self):
-        if self.mydb is not None:
-            try:
-                loop = asyncio.get_running_loop()
-                await loop.run_in_executor(None, self.mydb.close)
-            finally:
-                self.mydb = None
