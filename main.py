@@ -170,7 +170,8 @@ async def get_preferences(user_id: int):
         raise HTTPException(status_code=500, detail=f"Error de base de datos: {str(e)}")
 
     if not rows:
-        return JSONResponse(content={"usuario": user_id, "message": "No se le encontraron preferencias"}, status_code=404)
+        return JSONResponse(content={"usuario": user_id, "message": "No se le encontraron preferencias"},
+                            status_code=404)
 
     token = get_spotify_token_sync()
     if not token:
@@ -186,30 +187,10 @@ async def get_preferences(user_id: int):
 
         resultados_spotify = await asyncio.gather(*tasks)
 
-    return JSONResponse(content={"Usuario": user_id, "Nombre": username, "Lista de Preferencias": resultados_spotify}, status_code=200)
+    return JSONResponse(content={"Usuario": user_id, "Nombre": username, 
+                                "Lista de Preferencias": resultados_spotify}, status_code=200)
 
     
-def clean_spotify_data(raw_json):
-    if not raw_json or 'tracks' not in raw_json:
-        return []
 
-    items = raw_json['tracks']['items']
-    cleaned_data = []
-
-    for item in items:
-
-        track = {
-            "titulo": item.get('name'),
-            "artistas": ", ".join([artist['name'] for artist in item['artists']]),
-            "album": item['album']['name'],
-            "popularidad": item['popularity'],
-            "imagen": item['album']['images'][0]['url'] if item['album']['images'] else None,
-            "preview_url": item.get('preview_url'),
-            "spotify_url": item['external_urls'].get('spotify'),
-            "track_id": item.get('id')
-        }
-        cleaned_data.append(track)
-    
-    return cleaned_data
 
 
